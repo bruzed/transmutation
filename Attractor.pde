@@ -14,7 +14,7 @@ class Attractor
 		acceleration = new PVector(0,0);
 	    velocity = new PVector(0,0);
 	    location = new PVector(x,y);
-	    r = 5;
+	    r = 30;
 	    wandertheta = 0;
 	    maxspeed = 2;
 	    maxforce = 0.05;
@@ -89,9 +89,9 @@ class Attractor
 		// Draw a triangle rotated in the direction of velocity
 	    float theta = velocity.heading2D() + radians(90);
 	    //fill(255, 0, 0);
-		fill(mutation_green, 200);
-	    stroke(255, 0, 0, 50);
-		//noStroke();
+		//fill(mutation_green, 200);
+	    //stroke(255, 0, 0, 50);
+		noStroke();
 	    pushMatrix();
 	    translate(location.x,location.y);
 	    rotate(theta);
@@ -100,6 +100,11 @@ class Attractor
 	    vertex(-r, r*2);
 	    vertex(r, r*2);
 	    endShape();
+		imageMode(CENTER);
+		image(blueOrb, 0, 0, r*2, r*2);
+		image(greenOrb, 0, 0, r*1.5, r*1.5);
+		//image(whiteOrb, 0, 0, r*0.5, r*0.5);
+		image(redOrb, 0, 0, r, r);
 	    popMatrix();
 	}
 

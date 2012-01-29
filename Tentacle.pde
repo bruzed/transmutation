@@ -36,9 +36,13 @@ class Tentacle
 			fill(0, 50);
 			stroke(255, 50);
 			imageMode(CENTER);
-			image(orb, 0, RADIUS_MAX, i, i);
+			image(redOrb, 0, RADIUS_MAX, i*2, i*2);
+			image(greenOrb, 0, RADIUS_MAX, i*1.5, i*1.5);
+			image(whiteOrb, 0, RADIUS_MAX, i, i);
+			//image(blueOrb, 0, RADIUS_MAX, i, i);
+			//image(orb, 0, RADIUS_MAX, i, i);
 			ellipse(0, RADIUS_MAX, i, i);
-			//fill(255, 255, 255, 50);
+			fill(255, 255, 255, 50);
 			ellipse(0, RADIUS_MAX, i/2, i/2);
 			translate(0, - i );
 			rotate(angle);

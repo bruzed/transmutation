@@ -23,10 +23,13 @@ class Creation
 	
 	int MIN_POSSIBLE_DIVISIONS = 10;
 	int MAX_POSSIBLE_DIVISIONS = 70;
+	
+	int NUM_TENTACLES = 15;
+	int NUM_BURSTS = 5;
 
-	Tentacle[] tentacles = new Tentacle[30];
-	float[] positions = new float[30];
-	int[] divisions = new int[30];
+	Tentacle[] tentacles = new Tentacle[NUM_TENTACLES];
+	float[] positions = new float[NUM_TENTACLES];
+	int[] divisions = new int[NUM_TENTACLES];
 
 	ArrayList bursts;
 
@@ -63,7 +66,7 @@ class Creation
 			}
 		}
 
-		for( int i = 0; i < fft.avgSize(); i++ ) {
+		for( int i = 0; i < fft.avgSize() / 2; i++ ) {
 			//rect( i*w, height, i*w + w, height - fft.getAvg(i)*5 );
 			//speed += fft.getAvg(i);
 			//float angle = sin(speed)/random(50, 100) + sin(speed*1.2)/random(20.0, 50.0);
@@ -81,9 +84,13 @@ class Creation
 			if( fft.getAvg(i) > TENTACLE_POSITION_SENSITIVITY ) {
 				tentacles[i].changePosition();
 			}
+			
+			if( fft.getAvg(i) > TENTACLE_MOVE_SENSITIVITY ) {
+				//setDivisions(10, 70);
+			}
 
 			if( fft.getAvg(i) > BURST_SENSIVITY ) {
-				if( bursts.size() < 20 ) {
+				if( bursts.size() < NUM_BURSTS ) {
 					Burst burst = new Burst();
 					bursts.add(burst);
 					burst.draw();

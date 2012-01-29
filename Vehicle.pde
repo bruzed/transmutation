@@ -10,8 +10,10 @@ class Vehicle
 	Attractor attractor;
 	
 	int scaleRate = 30;
+	Boolean isScaled = false;
 	
-	int INITIAL_SIZE = 15;
+	int INITIAL_SIZE = 20;
+	float scaleTo = 0;
 	
 	PImage orb;
 	color randomColor;
@@ -20,7 +22,7 @@ class Vehicle
 	{
 		location = new PVector(x, y);
 		r = INITIAL_SIZE;
-		maxspeed = 20;
+		maxspeed = 18;
 		maxforce = 2.5;
 		acceleration = new PVector(0, 0);
 		velocity = new PVector(0, 0);
@@ -39,9 +41,10 @@ class Vehicle
 	    PVector separate = separate(vehicles);
 	     //PVector seek = seek(new PVector(mouseX,mouseY));
 		PVector seek = seek(a.location);
-		stroke(255,0,0, 50);
+		//stroke(255,0,0, 50);
+		stroke(lightYellow, 50);
 		strokeWeight(2);
-		line(location.x, location.y, a.location.x, a.location.y);
+		//line(location.x, location.y, a.location.x, a.location.y);
 	    separate.mult(2);
 	    seek.mult(1);
 	    applyForce(separate);
@@ -75,8 +78,9 @@ class Vehicle
 	      // If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
 	      if ((d > 0) && (d < desiredseparation)) {
 	        // Calculate vector pointing away from neighbor
-			stroke(255, 255, 255, 50);
-			strokeWeight(2);
+			//stroke(255, 255, 255, 50);
+			stroke(lightYellow, 100);
+			strokeWeight(1);
 			line(location.x, location.y, other.location.x, other.location.y);
 	        PVector diff = PVector.sub(location, other.location);
 	        diff.normalize();
@@ -140,17 +144,27 @@ class Vehicle
 	    location.add(velocity);
 	    // Reset accelertion to 0 each cycle
 	    acceleration.mult(0);
+		if(isScaleUp) {
+			scaleUpFunction();
+		} 
+		if(isScaleDown) {
+			scaleDownFunction();
+		}
+		
 	  }
 
 	  void display() {
 	    //fill(255, 100);
-		fill(0, 50);
-	    //noStroke();
-		stroke(255, 50);
+		//fill(0, 50);
+	    noStroke();
+		//stroke(255, 50);
 	    pushMatrix();
 	    translate(location.x, location.y);
-	    ellipse(0, 0, r, r);
-		image(orb, -r/2, -r/2, r, r);
+	    //ellipse(0, 0, r, r);
+		imageMode(CENTER);
+		image(redOrb, 0, 0, r*2, r*2);
+		image(greenOrb, 0, 0, r*1.5, r*1.5);
+		image(whiteOrb, 0, 0, r, r);
 	    popMatrix();
 	  }
 
@@ -164,12 +178,35 @@ class Vehicle
 	
 	void scaleUp(float amount)
 	{
-		r += amount;
+		//r += amount;
+		scaleTo = amount * 5;
+		if(amount < r) {
+			isScaleDown = true;
+		} else {
+			isScaleUp = true;
+		}
 	}
 	
 	void scaleDown()
 	{
 		r = INITIAL_SIZE;
 	}
+	
+	void scaleUpFunction()
+	{
+		if(r < scaleTo){
+			r += 10;
+		}
+	}
+	
+	void scaleDownFunction()
+	{
+		if(r > scaleTo) {
+			r -= 10;
+		}
+	}
+	
+	Boolean isScaleUp = false;
+	Boolean isScaleDown = false;
 	
 }

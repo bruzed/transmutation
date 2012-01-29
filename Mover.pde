@@ -13,7 +13,7 @@ class Mover
 	    acceleration = new PVector(0,0);
 	    velocity = new PVector(0,0);
 	    location = new PVector(x,y);
-	    r = 5;
+	    r = 40;
 	    wandertheta = 0;
 	    maxspeed = 2;
 	    maxforce = 0.05;
@@ -84,16 +84,24 @@ class Mover
 	    float theta = velocity.heading2D() + radians(90);
 	    //fill(255, 0, 0);
 	    //stroke(0);
-		fill(mutation_green, 200);
-	    stroke(255, 0, 0, 50);
+		//fill(mutation_green, 200);
+	    //stroke(255, 0, 0, 50);
+		noStroke();
 	    pushMatrix();
 	    translate(location.x,location.y);
 	    rotate(theta);
-	    beginShape(TRIANGLES);
-	    vertex(0, -r*2);
-	    vertex(-r, r*2);
-	    vertex(r, r*2);
-	    endShape();
+	    //beginShape(TRIANGLES);
+	    //vertex(0, -r*2);
+	    //vertex(-r, r*2);
+	    //vertex(r, r*2);
+	    //endShape();
+		imageMode(CENTER);
+		//image(redOrb, 0, 0, r*2, r*2);
+		//image(greenOrb, 0, 0, r*1.5, r*1.5);
+		//image(whiteOrb, 0, 0, r, r);
+		image(redTriangle, 0, 0, r*2, r*2);
+		image(greenTriangle, 0, 0, r*1.5, r*1.5);
+		image(whiteTriangle, 0, 0, r, r);
 	    popMatrix();
 	  }
 

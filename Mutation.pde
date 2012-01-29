@@ -1,19 +1,23 @@
 class Mutation
 {
-	float ATTRACTOR_MOVE_SENSITIVITY_DEFAULT = 30;
-	float VEHICLE_SCALE_SENSITIVITY_MIN_DEFAULT = 20;
-	float VEHICLE_SCALE_SENSITIVITY_MAX_DEFAULT = 30;
+	float ATTRACTOR_MOVE_SENSITIVITY_DEFAULT = 10;
+	float VEHICLE_SCALE_SENSITIVITY_MIN_DEFAULT = 0;
+	float VEHICLE_SCALE_SENSITIVITY_MAX_DEFAULT = 100;
+	float BURST_SENSIVITY_DEFAULT = 50;
 	
-	float ATTRACTOR_MOVE_SENSITIVITY = 30;
-	float VEHICLE_SCALE_SENSITIVITY_MIN = 20;
-	float VEHICLE_SCALE_SENSITIVITY_MAX = 30;
+	float ATTRACTOR_MOVE_SENSITIVITY = 10;
+	float VEHICLE_SCALE_SENSITIVITY_MIN = 0;
+	float VEHICLE_SCALE_SENSITIVITY_MAX = 100;
+	float BURST_SENSIVITY = 50;
 	
 	FFT fft;
 	int scaleRate = 0;
 
 	ArrayList<Vehicle> vehicles;
 	Attractor attractor;
-
+	
+	int NUM_BURSTS = 2;
+	int NUM_VEHICLES = 15;
 	ArrayList bursts;
 	
 	Mutation(FFT $fft) 
@@ -24,7 +28,7 @@ class Mutation
 	  	// We are now making random vehicles and storing them in an ArrayList
 	  	vehicles = new ArrayList<Vehicle>();
 		attractor = new Attractor(width/2, height/2);
-	  	for (int i = 0; i < 30; i++) {
+	  	for (int i = 0; i < NUM_VEHICLES; i++) {
 	    	vehicles.add(new Vehicle(random(width),random(height)));
 	  	}
 		bursts = new ArrayList();
@@ -44,7 +48,7 @@ class Mutation
 			}
 		}
 
-		for( int i = 0; i < fft.avgSize(); i++ ) {
+		for( int i = 0; i < fft.avgSize()/2; i++ ) {
 			//attractor
 			if( fft.getAvg(i) > ATTRACTOR_MOVE_SENSITIVITY ) {
 				attractor.wander();
@@ -55,15 +59,24 @@ class Mutation
 				//Vehicle vehicle = (Vehicle) vehicles.get(i);
 				Vehicle vehicle = (Vehicle) vehicles.get(i);
 				vehicle.scaleUp(fft.getAvg(i));
-				if( bursts.size() < 10 ) {
-					Burst burst = new Burst(vehicle.location.x, vehicle.location.y);
+				if( fft.getAvg(i) > BURST_SENSIVITY ) {
+					if( bursts.size() < NUM_BURSTS ) {
+						Burst burst = new Burst(vehicle.location.x, vehicle.location.y);
+						bursts.add(burst);
+						burst.draw();
+					}
+				}
+			} else {
+				//Vehicle vehicle = (Vehicle) vehicles.get(i);
+				//vehicle.scaleDown();
+			}
+			/*if( fft.getAvg(i) > BURST_SENSIVITY ) {
+				if( bursts.size() < NUM_BURSTS ) {
+					Burst burst = new Burst();
 					bursts.add(burst);
 					burst.draw();
 				}
-			} else {
-				Vehicle vehicle = (Vehicle) vehicles.get(i);
-				vehicle.scaleDown();
-			}
+			}*/
 		}
 
 		attractor.display();
@@ -95,6 +108,11 @@ class Mutation
 		VEHICLE_SCALE_SENSITIVITY_MAX = $max;
 	}
 	
+	void setBurstSensitivity(float $value)
+	{
+		BURST_SENSIVITY = $value;
+	}
+	
 	void reset()
 	{
 		ATTRACTOR_MOVE_SENSITIVITY = ATTRACTOR_MOVE_SENSITIVITY_DEFAULT;
@@ -115,6 +133,11 @@ class Mutation
 	float getVehicleScaleSensitivityMax()
 	{
 		return VEHICLE_SCALE_SENSITIVITY_MAX;
+	}
+	
+	float getBurstSensitivity()
+	{
+		return BURST_SENSIVITY;
 	}
 	
 }

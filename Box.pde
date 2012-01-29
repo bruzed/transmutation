@@ -55,13 +55,17 @@ class Box {
     //fill(175);
 	fill(0, 50);
     //stroke(0);
-	stroke(255, 50);
-	strokeWeight(2);
+	//stroke(255, 50);
+	//strokeWeight(2);
+	noStroke();
     //rect(0,0,w,h);
 	imageMode(CENTER);
-	image(orb, 0, 0, w, h);
-	image(orb, 0, 0, w, h);
-	ellipse(0,0,w,h);
+	//image(orb, 0, 0, w, h);
+	//image(orb, 0, 0, w, h);
+	image(blueOrb, 0, 0, w*2, h*2);
+	image(greenOrb, 0, 0, w*1.5, h*1.5);
+	image(redOrb, 0, 0, w, h);
+	//ellipse(0,0,w,h);
     popMatrix();
   }
 

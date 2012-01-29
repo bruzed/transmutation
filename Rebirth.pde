@@ -74,7 +74,7 @@ class Rebirth
 	{
 	  mesh = new WETriangleMesh();
 	  //mesh.addMesh(new Plane(new Vec3D(), new Vec3D(0, 1, 0)).toMesh(400));
-	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 100).toMesh());
+	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 50).toMesh());
 	  backupMesh();
 	}
 
@@ -89,12 +89,13 @@ class Rebirth
 
 	void draw() 
 	{
-		fill(255, 150);
+		//fill(255, 150);
 		//text("subdivision: " + subdivisionTypes[randomSubdiv], 10, 40);
-		text("subdivision: " + subdivisionTypes[randomSubdiv-1] + " " + vectorCoords, 140, 700, 300, 100);
-		fill(c1, 150);
+		//text("subdivision: " + subdivisionTypes[randomSubdiv-1] + " " + vectorCoords, 140, 700, 300, 100);
+		fill(c1, 50);
 		//noFill();
-		stroke(255, 25);
+		stroke(c1, 50);
+		pushMatrix();
 	  	translate(width / 2, height / 2, 0);
 	  	//rotateX(mouseY * 0.01f);
 	  	//rotateY(mouseX * 0.01f);
@@ -127,7 +128,7 @@ class Rebirth
 					Vec3D v = mesh.getVertexForID(i);
 					Vec3D vbackup = vertBackup.get(i);
 					//println("v.z: " + v.z + ", vbackup.z: " + vbackup.z + ", fft.getAvg(i): " + fft.getAvg(i));
-					float distortion = 200;
+					float distortion = 300;
 					v.x = vbackup.x + cos( random(-fft.getAvg(i), fft.getAvg(i)) ) * distortion;
 					v.y = vbackup.y + sin( random(-fft.getAvg(i), fft.getAvg(i)) ) * distortion;
 					v.z = vbackup.z + sin( random(-fft.getAvg(i), fft.getAvg(i)) ) * distortion;
@@ -166,6 +167,7 @@ class Rebirth
 				rotateXValue += 0.5f;
 			}
 		}
+		popMatrix();
 	}
 
 	void drawWireMeshDelta() 

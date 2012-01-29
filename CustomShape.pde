@@ -10,7 +10,8 @@ class CustomShape {
   	Body body;
 	color col;
 	float x1, y1, x2, y2, x3, y3, x4, y4, x5, y5;
-	PImage triangle;
+	//PImage triangle;
+	int imageWidth = 30;
 
   // Constructor
   CustomShape(float x, float y) {
@@ -19,7 +20,7 @@ class CustomShape {
 	body.setUserData(this);
 	//col = color(255, 150);
 	col = color(255, 0, 0);
-	triangle = loadImage("triangle.png");
+	//triangle = loadImage("triangle.png");
   }
 
   // This function removes the particle from the box2d world
@@ -48,8 +49,8 @@ class CustomShape {
 
 // Change color when hit
   void change() {
-    //col = color(255,0,0); 
-	col = color(255, 255, 255);
+    //col = color(255,0,0);
+	//col = color(255, 255, 255, 255);
   }
 
   // Drawing the box
@@ -68,19 +69,21 @@ class CustomShape {
     pushMatrix();
     translate(pos.x,pos.y);
     rotate(-a);
-    fill(col, 100);
-	noStroke();
+    //fill(col, 10);
 	//stroke(255, 50);
 	//strokeWeight(2);
 	imageMode(CENTER);
-	image(triangle, 0, 0, triangle.width*0.6, triangle.height*0.6);
-    beginShape();
+	//image(triangle, 0, 0, triangle.width*0.6, triangle.height*0.6);
+	image(redTriangle, 0, 0, imageWidth*1.5, imageWidth*1.5);
+	image(greenTriangle, 0, 0, imageWidth*1.25, imageWidth*1.25);
+	image(whiteTriangle, 0, 0, imageWidth, imageWidth);
+    //beginShape();
     // For every vertex, convert to pixel vector
-    for (int i = 0; i < vertices.length; i++) {
-      Vec2 v = box2d.vectorWorldToPixels(vertices[i]);
-      vertex(v.x,v.y);
-    }
-    endShape(CLOSE);
+    //for (int i = 0; i < vertices.length; i++) {
+      //Vec2 v = box2d.vectorWorldToPixels(vertices[i]);
+      //vertex(v.x,v.y);
+    //}
+    //endShape(CLOSE);
     popMatrix();
   }
 

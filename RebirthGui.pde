@@ -23,7 +23,7 @@ class RebirthGui
 	void draw()
 	{
 		//name, x, y, width
-		ControlGroup scene_rebirth = ui.addGroup("Rebirth", group_xpos, 330, group_width);
+		ControlGroup scene_rebirth = ui.addGroup("Rebirth", group_xpos + (group_width + padding)*3, group_ypos, group_width);
 		scene_rebirth.moveTo(controlWindow);
 
 		//name, value, x, y, width, height

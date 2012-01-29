@@ -4,7 +4,7 @@ class MutationGui
 	ControlP5 ui;
 	ControlWindow controlWindow;
 	Button play_mutation_button;
-	Slider attractor_sensitivity_slider;
+	Slider attractor_sensitivity_slider, burst_sensitivity_slider;
 	Range vehicle_scale_range_slider;
 	
 	MutationGui(ControlP5 $ui, ControlWindow $controlWindow)
@@ -44,6 +44,14 @@ class MutationGui
 			slider_width, slider_height
 		);
 		vehicle_scale_range_slider.setGroup(scene_mutation);
+		
+		burst_sensitivity_slider = ui.addSlider(
+			"mutation_burst_sensitivity", 
+			0, 100, mutation.getBurstSensitivity(),
+			0, play_mutation_button.getHeight() + vehicle_scale_range_slider.getHeight() + attractor_sensitivity_slider.getHeight() + (padding * 4), 
+			slider_width, slider_height
+		);
+		burst_sensitivity_slider.setGroup(scene_mutation);
 
 	}
 	

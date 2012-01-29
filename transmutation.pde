@@ -81,23 +81,45 @@ Slider burst_sensitivity_slider;*/
 //colors
 color greenColor = color(130, 126, 0);
 color redColor = color(114, 5, 2);
+color lightYellow = color(255, 220, 128);
+color lightBlue = color(112, 210, 238);
 int[] colors = { greenColor, redColor };
 
 color mutation_green = color(36, 53, 27);
 
 //defaults
 int screenWidth = 1280;
-int screenHeight = 800;
+int screenHeight = 800; //hd
+//int screenHeight = 768;
 
 PImage bg;
+PImage whiteOrb, redOrb, greenOrb, blueOrb, blackOrb, redTriangle, greenTriangle, whiteTriangle;
+PFont myfont;
+
+TextBlock textblock;
 
 void setup()
 {
 	size(screenWidth, screenHeight, OPENGL);
+	hint(DISABLE_OPENGL_2X_SMOOTH);
 	smooth();
 	frameRate(30);
-	bg = loadImage("mutation.jpg");
-	textSize(6);
+	//bg = loadImage("mutation.jpg");
+	bg = loadImage("mutation.png");
+	
+	blackOrb = loadImage("black_orb.png");
+	//whiteOrb = loadImage("white_orb.png");
+	//redOrb = loadImage("red_orb.png");
+	//greenOrb = loadImage("green_orb.png");
+	//blueOrb = loadImage("blue_orb.png");
+	whiteOrb = loadImage("white_orb_tex.png");
+	redOrb = loadImage("red_orb_tex.png");
+	greenOrb = loadImage("green_orb_tex.png");
+	blueOrb = loadImage("blue_orb_tex.png");
+	
+	redTriangle = loadImage("red_triangle.png");
+	greenTriangle = loadImage("green_triangle.png");
+	whiteTriangle = loadImage("white_triangle.png");
 	
 	//setup minim
 	minim = new Minim(this);
@@ -119,7 +141,7 @@ void setup()
 	
 	ui = new ControlP5(this);
 	ui.setAutoDraw(false);
-	controlWindow = ui.addControlWindow("controls", 0, 0, 1200, 768);
+	controlWindow = ui.addControlWindow("controls", 0, 0, 1600, 600);
 	controlWindow.setBackground(color(0));
 	
 	//guis
@@ -129,6 +151,9 @@ void setup()
 	rebirthGui = new RebirthGui(ui, controlWindow);
 	drawGUI();
 	
+	myfont = loadFont("MechanicalFun.vlw");
+	textFont(myfont, 18);
+	textblock = new TextBlock();
 }
 
 void drawGUI()
@@ -150,7 +175,7 @@ void draw()
 	gl = pgl.gl;
 	
 	pgl.beginGL();
-
+	//gl.glEnable (gl.GL_LINE_SMOOTH);
 	// This fixes the overlap issue
 	gl.glDisable(GL.GL_DEPTH_TEST);
 
@@ -159,6 +184,7 @@ void draw()
 
 	// Define the blend mode
 	gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
+	//gl.glDisable (gl.GL_LINE_SMOOTH);
 	pgl.endGL();
 	
 	ui.draw();
@@ -180,7 +206,11 @@ void draw()
 			rebirth.draw();
 			//ui.hide();
 			break;
+		default:
+			textblock.draw();
+			break;
 	}
+	
 }
 
 void keyPressed() 
@@ -264,6 +294,11 @@ void vehicle_scale_range(float $value)
 {
 	float[] values = mutationGui.vehicle_scale_range_slider.arrayValue();
 	mutation.setVehicleScaleSensitivity(values[0], values[1]);
+}
+
+void mutation_burst_sensitivity(float $value)
+{
+	mutation.setBurstSensitivity($value);
 }
 
 //birth
