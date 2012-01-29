@@ -70,13 +70,6 @@ class Mutation
 				//Vehicle vehicle = (Vehicle) vehicles.get(i);
 				//vehicle.scaleDown();
 			}
-			/*if( fft.getAvg(i) > BURST_SENSIVITY ) {
-				if( bursts.size() < NUM_BURSTS ) {
-					Burst burst = new Burst();
-					bursts.add(burst);
-					burst.draw();
-				}
-			}*/
 		}
 
 		attractor.display();

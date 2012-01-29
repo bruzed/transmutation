@@ -6,8 +6,8 @@ class Attractor
 	PVector acceleration;
 	float r;
 	float wandertheta;
-	float maxforce;    // Maximum steering force
-	float maxspeed;    // Maximum speed
+	float maxforce;
+	float maxspeed;
 
 	Attractor(float x, float y) 
 	{
@@ -27,70 +27,49 @@ class Attractor
 	    display();
 	}
 
-	// Method to update location
 	void update() 
 	{
-		// Update velocity
 	    velocity.add(acceleration);
-	    // Limit speed
 	    velocity.limit(maxspeed);
 	    location.add(velocity);
-	    // Reset accelertion to 0 each cycle
 	    acceleration.mult(0);
 	}
 
 	void wander() 
 	{
-	    float wanderR = 25;         // Radius for our "wander circle"
-	    float wanderD = 40;         // Distance for our "wander circle"
+	    float wanderR = 25;
+	    float wanderD = 40;
 	    float change = 0.6;
-	    wandertheta += random(-change,change);     // Randomly change wander theta
-
-	    // Now we have to calculate the new location to steer towards on the wander circle
-	    PVector circleloc = velocity.get();    // Start with velocity
-	    circleloc.normalize();            // Normalize to get heading
-	    circleloc.mult(wanderD);          // Multiply by distance
-	    circleloc.add(location);               // Make it relative to boid's location
-
-	    float h = velocity.heading2D();        // We need to know the heading to offset wandertheta
-
+	    wandertheta += random(-change,change);
+	    PVector circleloc = velocity.get();
+	    circleloc.normalize();
+	    circleloc.mult(wanderD);
+	    circleloc.add(location);
+	    float h = velocity.heading2D();
 	    PVector circleOffSet = new PVector(wanderR*cos(wandertheta+h),wanderR*sin(wandertheta+h));
 	    PVector target = PVector.add(circleloc,circleOffSet);
 	    seek(target);
-
-	    // Render wandering circle, etc. 
-	    //if (debug) drawWanderStuff(location,circleloc,target,wanderR);
 	}  
 
 	void applyForce(PVector force) 
 	{
-		// We could add mass here if we want A = F / M
 	    acceleration.add(force);
 	}
 
-	// A method that calculates and applies a steering force towards a target
-	// STEER = DESIRED MINUS VELOCITY
 	void seek(PVector target) 
 	{
-		PVector desired = PVector.sub(target,location);  // A vector pointing from the location to the target
-
-	    // Normalize desired and scale to maximum speed
+		PVector desired = PVector.sub(target,location);
 	    desired.normalize();
 	    desired.mult(maxspeed);
-	    // Steering = Desired minus Velocity
 	    PVector steer = PVector.sub(desired,velocity);
-	    steer.limit(maxforce);  // Limit to maximum steering force
+	    steer.limit(maxforce);
 
 	    applyForce(steer);
 	}
 
 	void display() 
 	{
-		// Draw a triangle rotated in the direction of velocity
 	    float theta = velocity.heading2D() + radians(90);
-	    //fill(255, 0, 0);
-		//fill(mutation_green, 200);
-	    //stroke(255, 0, 0, 50);
 		noStroke();
 	    pushMatrix();
 	    translate(location.x,location.y);
@@ -103,7 +82,6 @@ class Attractor
 		imageMode(CENTER);
 		image(blueOrb, 0, 0, r*2, r*2);
 		image(greenOrb, 0, 0, r*1.5, r*1.5);
-		//image(whiteOrb, 0, 0, r*0.5, r*0.5);
 		image(redOrb, 0, 0, r, r);
 	    popMatrix();
 	}

@@ -1,3 +1,24 @@
+/**
+ *	<p>Transmutation: Custom audio visualization software created for Speak Onion's <http://www.speakonion.com/> live performance on 01/27/2012 @ The Charleston, NYC.</p>
+ *	
+ *	Thanks to Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>. Awesome code examples found in, I learned so much!!
+ *	
+ *  Copyright (C) 2012  bruzed
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import controlP5.*;
 import processing.opengl.*;
 import javax.media.opengl.*;
@@ -54,7 +75,7 @@ RebirthGui rebirthGui;
 
 //gui
 int group_xpos = 20;
-int group_ypos = 50;
+int group_ypos = 80;
 int group_width = 380;
 int padding = 10;
 int play_button_xpos = 0;
@@ -67,16 +88,7 @@ int reset_button_width = 90;
 int slider_width = 200;
 int slider_height = 30;
 
-/*
-Button play_creation_button; 
-Button play_mutation_button;
-Button play_birth_button;
-Button play_rebirth_button;
-Range division_range;
-Range xpos_range_slider;
-Slider tentacle_move_sensitivity;
-Slider tentacle_position_sensitivity;
-Slider burst_sensitivity_slider;*/
+Toggle splitScreen;
 
 //colors
 color greenColor = color(130, 126, 0);
@@ -104,19 +116,14 @@ void setup()
 	hint(DISABLE_OPENGL_2X_SMOOTH);
 	smooth();
 	frameRate(30);
-	//bg = loadImage("mutation.jpg");
-	bg = loadImage("mutation.png");
 	
+	//load images
+	bg = loadImage("mutation.png");
 	blackOrb = loadImage("black_orb.png");
-	//whiteOrb = loadImage("white_orb.png");
-	//redOrb = loadImage("red_orb.png");
-	//greenOrb = loadImage("green_orb.png");
-	//blueOrb = loadImage("blue_orb.png");
 	whiteOrb = loadImage("white_orb_tex.png");
 	redOrb = loadImage("red_orb_tex.png");
 	greenOrb = loadImage("green_orb_tex.png");
 	blueOrb = loadImage("blue_orb_tex.png");
-	
 	redTriangle = loadImage("red_triangle.png");
 	greenTriangle = loadImage("green_triangle.png");
 	whiteTriangle = loadImage("white_triangle.png");
@@ -158,11 +165,14 @@ void setup()
 
 void drawGUI()
 {
-	//drawCreationControls();
 	creationGui.draw();
 	mutationGui.draw();
 	birthGui.draw();
 	rebirthGui.draw();
+	
+	//splitscreen
+	splitScreen = ui.addToggle("splitscreen", false, 20, 20, 20, 20);
+	splitScreen.moveTo(controlWindow);
 }
 
 void draw()
@@ -173,18 +183,10 @@ void draw()
 	
 	pgl = (PGraphicsOpenGL) g;
 	gl = pgl.gl;
-	
 	pgl.beginGL();
-	//gl.glEnable (gl.GL_LINE_SMOOTH);
-	// This fixes the overlap issue
-	gl.glDisable(GL.GL_DEPTH_TEST);
-
-	// Turn on the blend mode
-	gl.glEnable(GL.GL_BLEND);
-
-	// Define the blend mode
-	gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
-	//gl.glDisable (gl.GL_LINE_SMOOTH);
+		gl.glDisable(GL.GL_DEPTH_TEST);
+		gl.glEnable(GL.GL_BLEND);
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
 	pgl.endGL();
 	
 	ui.draw();
@@ -192,19 +194,15 @@ void draw()
 	switch(current_scene) {
 		case 0:
 			creation.draw();
-			//ui.draw();
 			break;
 		case 1:
 			mutation.draw();
-			//ui.draw();
 			break;
 		case 2:
 			birth.draw();
-			//ui.draw();
 			break;
 		case 3:
 			rebirth.draw();
-			//ui.hide();
 			break;
 		default:
 			textblock.draw();
@@ -254,6 +252,16 @@ void controlEvent(ControlEvent $e)
 	if($e.controller().name() == "reset_creation") { creation.reset(); }
 	if($e.controller().name() == "reset_mutation") { mutation.reset(); }
 	if($e.controller().name() == "reset_birth") { birth.reset(); }
+	if($e.controller().name() == "reset_rebirth") { rebirth.reset(); }
+}
+
+//splitscreen
+void splitscreen(boolean theFlag) {
+	if(theFlag==true) {
+    	frame.setLocation( -1280, 0);
+  	} else {
+    	frame.setLocation( 0, 0);
+  	}
 }
 
 //creation

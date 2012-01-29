@@ -82,23 +82,11 @@ class Mover
 	  void display() {
 	    // Draw a triangle rotated in the direction of velocity
 	    float theta = velocity.heading2D() + radians(90);
-	    //fill(255, 0, 0);
-	    //stroke(0);
-		//fill(mutation_green, 200);
-	    //stroke(255, 0, 0, 50);
 		noStroke();
 	    pushMatrix();
 	    translate(location.x,location.y);
 	    rotate(theta);
-	    //beginShape(TRIANGLES);
-	    //vertex(0, -r*2);
-	    //vertex(-r, r*2);
-	    //vertex(r, r*2);
-	    //endShape();
 		imageMode(CENTER);
-		//image(redOrb, 0, 0, r*2, r*2);
-		//image(greenOrb, 0, 0, r*1.5, r*1.5);
-		//image(whiteOrb, 0, 0, r, r);
 		image(redTriangle, 0, 0, r*2, r*2);
 		image(greenTriangle, 0, 0, r*1.5, r*1.5);
 		image(whiteTriangle, 0, 0, r, r);
