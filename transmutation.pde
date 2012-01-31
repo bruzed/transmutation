@@ -1,7 +1,7 @@
 /**
  *	<p>Transmutation: Custom audio visualization software created for Speak Onion's <http://www.speakonion.com/> live performance on 01/27/2012 @ The Charleston, NYC.</p>
  *	
- *	Thanks to Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>. Awesome code examples found in, I learned so much!!
+ *	Thanks to Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>
  *	
  *  Copyright (C) 2012  bruzed
  *
