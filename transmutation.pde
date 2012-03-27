@@ -130,7 +130,7 @@ void setup()
 	frameRate(30);
 	
 	//load images
-	bg = loadImage("mutation.png");
+	//bg = loadImage("mutation.png");
 	blackOrb = loadImage("black_orb.png");
 	whiteOrb = loadImage("white_orb_tex.png");
 	redOrb = loadImage("red_orb_tex.png");
@@ -227,8 +227,8 @@ void draw()
   	offscreen.beginDraw();
 	
 		background(0, 0, 0);
-		imageMode(CORNER);
-		image(bg, 0, 0, screenWidth, screenHeight);
+		//imageMode(CORNER);
+		//image(bg, 0, 0, screenWidth, screenHeight);
 		
 		pgl = (PGraphicsOpenGL) g;
 		gl = pgl.gl;
@@ -325,6 +325,8 @@ void controlEvent(ControlEvent $e)
 	if($e.controller().name() == "reset_mutation") { mutation.reset(); }
 	if($e.controller().name() == "reset_birth") { birth.reset(); }
 	if($e.controller().name() == "reset_rebirth") { rebirth.reset(); }
+	//rebirth subdivide
+	//if($e.controller().name() == "subdivide") { rebirth.subdivide(rebirth.SUBDIV_RANGE); }
 }
 
 //splitscreen
