@@ -47,6 +47,9 @@ import toxi.math.*;
 import toxi.util.*;
 import toxi.processing.*;
 
+import deadpixel.keystone.*;
+import codeanticode.glgraphics.*;
+
 Minim minim;
 AudioInput audioInput;
 FFT fft;
@@ -110,9 +113,18 @@ PFont myfont;
 
 TextBlock textblock;
 
+GLGraphicsOffScreen offscreen;
+Keystone ks;
+CornerPinSurface surface;
+
 void setup()
 {
-	size(screenWidth, screenHeight, OPENGL);
+	//size(screenWidth, screenHeight, OPENGL);
+	size(screenWidth, screenHeight, GLConstants.GLGRAPHICS);
+	offscreen = new GLGraphicsOffScreen(this, width, height);
+	ks = new Keystone(this);
+	surface = ks.createCornerPinSurface(width, height, 10);
+
 	hint(DISABLE_OPENGL_2X_SMOOTH);
 	smooth();
 	frameRate(30);
@@ -177,37 +189,79 @@ void drawGUI()
 
 void draw()
 {
+	// convert 
+  	PVector mouse = surface.getTransformedMouse();
+
+	// background(0, 0, 0);
+	// imageMode(CORNER);
+	// image(bg, 0, 0, screenWidth, screenHeight);
+	
+	// pgl = (PGraphicsOpenGL) g;
+	// gl = pgl.gl;
+	// pgl.beginGL();
+	// 	gl.glDisable(GL.GL_DEPTH_TEST);
+	// 	gl.glEnable(GL.GL_BLEND);
+	// 	gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
+	// pgl.endGL();
+	
+	// ui.draw();
+	// //draw the selected scene
+	// switch(current_scene) {
+	// 	case 0:
+	// 		creation.draw();
+	// 		break;
+	// 	case 1:
+	// 		mutation.draw();
+	// 		break;
+	// 	case 2:
+	// 		birth.draw();
+	// 		break;
+	// 	case 3:
+	// 		rebirth.draw();
+	// 		break;
+	// 	default:
+	// 		textblock.draw();
+	// 		break;
+	// }
+
+  	offscreen.beginDraw();
+	
+		background(0, 0, 0);
+		imageMode(CORNER);
+		image(bg, 0, 0, screenWidth, screenHeight);
+		
+		pgl = (PGraphicsOpenGL) g;
+		gl = pgl.gl;
+		pgl.beginGL();
+			gl.glDisable(GL.GL_DEPTH_TEST);
+			gl.glEnable(GL.GL_BLEND);
+			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
+		pgl.endGL();
+		
+		ui.draw();
+		//draw the selected scene
+		switch(current_scene) {
+			case 0:
+				creation.draw();
+				break;
+			case 1:
+				mutation.draw();
+				break;
+			case 2:
+				birth.draw();
+				break;
+			case 3:
+				rebirth.draw();
+				break;
+			default:
+				textblock.draw();
+				break;
+		}
+
+	offscreen.endDraw();
+
 	background(0, 0, 0);
-	imageMode(CORNER);
-	image(bg, 0, 0, screenWidth, screenHeight);
-	
-	pgl = (PGraphicsOpenGL) g;
-	gl = pgl.gl;
-	pgl.beginGL();
-		gl.glDisable(GL.GL_DEPTH_TEST);
-		gl.glEnable(GL.GL_BLEND);
-		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
-	pgl.endGL();
-	
-	ui.draw();
-	//draw the selected scene
-	switch(current_scene) {
-		case 0:
-			creation.draw();
-			break;
-		case 1:
-			mutation.draw();
-			break;
-		case 2:
-			birth.draw();
-			break;
-		case 3:
-			rebirth.draw();
-			break;
-		default:
-			textblock.draw();
-			break;
-	}
+	surface.render(offscreen.getTexture());
 	
 }
 
@@ -218,6 +272,24 @@ void keyPressed()
 	} else if(key=='2') {
     	frame.setLocation(0, 0);
   	}
+
+  	switch(key) {
+	  case 'c':
+	    // enter/leave calibration mode, where surfaces can be warped 
+	    // & moved
+	    ks.toggleCalibration();
+	    break;
+
+	  case 'l':
+	    // loads the saved layout
+	    ks.load();
+	    break;
+
+	  case 's':
+	    // saves the layout
+	    ks.save();
+	    break;
+	  }
 }
 
 void stop()
