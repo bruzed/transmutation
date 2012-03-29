@@ -74,7 +74,7 @@ class Rebirth
 	{
 	  mesh = new WETriangleMesh();
 	  //mesh.addMesh(new Plane(new Vec3D(), new Vec3D(0, 1, 0)).toMesh(400));
-	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 50).toMesh());
+	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 40).toMesh());
 	  backupMesh();
 	}
 
@@ -160,7 +160,8 @@ class Rebirth
 			}
 
 			if( fft.getAvg(i) > SUBDIV_SENSITIVITY_MIN && fft.getAvg(i) < SUBDIV_SENSITIVITY_MAX ) {
-				subdivide( SUBDIV_RANGE );
+				//subdivide( SUBDIV_RANGE );
+				change_color();
 			}
 
 			if( fft.getAvg(i) > ROTATEX_FAST_SENSITIVITY_MIN && fft.getAvg(i) < ROTATEX_FAST_SENSITIVITY_MAX ) {
@@ -190,11 +191,11 @@ class Rebirth
 	    // subdivide all mesh edges if their length > 10
 		randomSubdiv = round( random( 1, 5 ) );
 		//fill( 255, 0, 0, 100);
-		c1 = color( random(0, 255), random(0, 255), random(0, 255) );
+		//c1 = color( random(0, 255), random(0, 255), random(0, 255) );
 		//fill( random(0, 255), random(0, 255), random(0, 255), 100);
-		fill(c1, 150);
+		//fill(c1, 150);
 		//stroke(c1, 50);
-		noStroke();
+		//noStroke();
 
 		switch( randomSubdiv ) {
 	      case '1':
@@ -231,6 +232,13 @@ class Rebirth
 		  }
 		  mesh.rebuildIndex();
 		  backupMesh();
+	}
+
+	void change_color()
+	{
+		c1 = color( random(0, 255), random(0, 255), random(0, 255) );
+		fill(c1, 150);
+		noStroke();
 	}
 	
 	//getters/setters

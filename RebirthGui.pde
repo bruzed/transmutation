@@ -116,6 +116,9 @@ class RebirthGui
 		);
 		subdiv_sensitivity_range_slider.setGroup(scene_rebirth);
 
+		//Button subdivide_rebirth = ui.addButton("subdivide", 0, 0, scene_rebirth.getHeight() + play_rebirth_button.getHeight() + distort_sensitivity_range_slider.getHeight() + rotatex_positive_sensitivity_range_slider.getHeight() + rotatex_negative_sensitivity_range_slider.getHeight() + rotatey_positive_sensitivity_range_slider.getHeight() + rotatey_negative_sensitivity_range_slider.getHeight() + rotatez_positive_sensitivity_range_slider.getHeight() + rotatez_negative_sensitivity_range_slider.getHeight() + rotatex_fast_sensitivity_range_slider.getHeight() + (padding * 10) + 30, reset_button_width, button_height);
+		//subdivide_rebirth.setGroup(scene_rebirth);
+
 	}
 	
 }

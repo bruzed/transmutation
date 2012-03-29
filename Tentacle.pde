@@ -28,13 +28,14 @@ class Tentacle
 		translate(xpos, height);
 		for (int i = divisions; i > 0; i--) {
 			//stroke(130, 126, 0, 150);
-			stroke(255, 0, 0, 100);
+			stroke(255, 255, 255, 80);
 			line(0, 0, 0, -i);
 			//strokeWeight(i);
 			//noStroke();
 			//fill(255, 255, 255, 50);
 			fill(0, 50);
-			stroke(255, 50);
+			//stroke(255, 50);
+			noStroke();
 			imageMode(CENTER);
 			image(redOrb, 0, RADIUS_MAX, i*2, i*2);
 			image(greenOrb, 0, RADIUS_MAX, i*1.5, i*1.5);
