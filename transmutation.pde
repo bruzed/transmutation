@@ -109,13 +109,23 @@ int screenHeight = 800; //hd
 
 PImage bg;
 PImage whiteOrb, redOrb, greenOrb, blueOrb, blackOrb, redTriangle, greenTriangle, whiteTriangle;
-PFont myfont;
 
+PFont myfont;
 TextBlock textblock;
 
 GLGraphicsOffScreen offscreen;
 Keystone ks;
 CornerPinSurface surface;
+
+//shaders
+GLTexture mutation_texture, dest;
+GLTexture[] sources;
+GLTextureFilter[] filters;
+int sel = 0;
+
+Button button_fly, button_tunnel, button_rtunnel;
+
+//float t = 1.0;
 
 void setup()
 {
@@ -128,14 +138,17 @@ void setup()
 	hint(DISABLE_OPENGL_2X_SMOOTH);
 	smooth();
 	frameRate(30);
+
+	//PFont font = loadFont("Tahoma-18.vlw");
+  	//textFont(font, 18);
 	
 	//load images
 	//bg = loadImage("mutation.png");
 	blackOrb = loadImage("black_orb.png");
-	whiteOrb = loadImage("white_orb_tex.png");
-	redOrb = loadImage("red_orb_tex.png");
-	greenOrb = loadImage("green_orb_tex.png");
-	blueOrb = loadImage("blue_orb_tex.png");
+	whiteOrb = loadImage("white_orb.png");
+	redOrb = loadImage("red_orb.png");
+	greenOrb = loadImage("green_orb.png");
+	blueOrb = loadImage("blue_orb.png");
 	redTriangle = loadImage("red_triangle.png");
 	greenTriangle = loadImage("green_triangle.png");
 	whiteTriangle = loadImage("white_triangle.png");
@@ -173,6 +186,30 @@ void setup()
 	myfont = loadFont("MechanicalFun.vlw");
 	textFont(myfont, 18);
 	textblock = new TextBlock();
+
+	//shaders
+	GLTextureParameters params = new GLTextureParameters();
+	params.wrappingU = REPEAT;
+	params.wrappingV = REPEAT;
+	mutation_texture = new GLTexture(this, "mutation.png", params);   
+	dest = new GLTexture(this, width, height);
+	  
+	filters = new GLTextureFilter[3];
+	sources = new GLTexture[3];
+
+	filters[0] = new GLTextureFilter(this, "Fly.xml");
+	sources[0] = mutation_texture;
+
+	filters[1] = new GLTextureFilter(this, "Tunnel.xml");
+	sources[1] = mutation_texture;
+
+	filters[2] = new GLTextureFilter(this, "ReliefTunnel.xml");
+	sources[2] = mutation_texture;
+	  
+	float[] res = new float[] {width, height};  
+	for (int i = 0; i < filters.length; i++) {
+		filters[i].setParameterValue("resolution", res);
+	}
 }
 
 void drawGUI()
@@ -185,12 +222,25 @@ void drawGUI()
 	//splitscreen
 	splitScreen = ui.addToggle("splitscreen", false, 20, 20, 20, 20);
 	splitScreen.moveTo(controlWindow);
+
+	//buttons to switch shaders
+	ControlGroup shader_controls = ui.addGroup("Shaders", 10, 400, 320);
+	shader_controls.moveTo(controlWindow);
+
+	button_fly = ui.addButton("fly", 0, 0, 10, button_width/2, button_height);
+	button_fly.setGroup(shader_controls);
+
+	button_tunnel = ui.addButton("tunnel", 0, button_width/2 + 10, 10, button_width/2, button_height);
+	button_tunnel.setGroup(shader_controls);
+
+	button_rtunnel = ui.addButton("relief_tunnel", 0, button_width/2 * 2 + 20, 10, button_width/2, button_height);
+	button_rtunnel.setGroup(shader_controls);
 }
 
 void draw()
 {
 	// convert 
-  	PVector mouse = surface.getTransformedMouse();
+  	PVector mouse1 = surface.getTransformedMouse();
 
 	// background(0, 0, 0);
 	// imageMode(CORNER);
@@ -225,8 +275,31 @@ void draw()
 	// }
 
   	offscreen.beginDraw();
-	
+		
 		background(0, 0, 0);
+
+		// fft.forward(audioInput.mix);
+
+		// t = millis() / 1000.0;
+		
+		// for( int i = 0; i < fft.avgSize(); i++ ) {
+		// 	if( fft.getAvg(i) > 40 ) {
+		// 		t = millis() / ( fft.getAvg(i) * 1000.0 );
+		// 	}
+		// }
+
+		float t = millis() / 2000.0;
+   
+  		filters[sel].setParameterValue("time", t);
+
+  		if (0 < filters[sel].getNumInputTextures()) {
+    		filters[sel].apply(sources[sel], dest);
+  		} else {
+    		filters[sel].apply(dest);
+  		}
+  	
+  		imageMode(CORNER);
+
 		//imageMode(CORNER);
 		//image(bg, 0, 0, screenWidth, screenHeight);
 		
@@ -239,6 +312,9 @@ void draw()
 		pgl.endGL();
 		
 		ui.draw();
+		
+		image(dest, 0, 0);
+
 		//draw the selected scene
 		switch(current_scene) {
 			case 0:
@@ -258,6 +334,8 @@ void draw()
 				break;
 		}
 
+		//text(filters[sel].getName() + " - fps: " + nfc(frameRate, 2) + " - time: " + nfc(t, 2), 0, 20);
+
 	offscreen.endDraw();
 
 	background(0, 0, 0);
@@ -267,6 +345,7 @@ void draw()
 
 void keyPressed() 
 {
+
 	if(key=='1') {
     	frame.setLocation( -1280, 0);
 	} else if(key=='2') {
@@ -274,22 +353,27 @@ void keyPressed()
   	}
 
   	switch(key) {
-	  case 'c':
-	    // enter/leave calibration mode, where surfaces can be warped 
-	    // & moved
-	    ks.toggleCalibration();
-	    break;
+	  	case 'c':
+	    	// enter/leave calibration mode, where surfaces can be warped 
+	    	// & moved
+	    	ks.toggleCalibration();
+	    	break;
 
-	  case 'l':
-	    // loads the saved layout
-	    ks.load();
-	    break;
+	  	case 'l':
+	    	// loads the saved layout
+	    	ks.load();
+	    	break;
 
-	  case 's':
-	    // saves the layout
-	    ks.save();
-	    break;
-	  }
+	  	case 's':
+	    	// saves the layout
+	    	ks.save();
+	    	break;
+
+	    //case 'f':
+	    	//sel = (sel + 1) % filters.length;
+	    	//break;
+
+	}
 }
 
 void stop()
@@ -325,8 +409,10 @@ void controlEvent(ControlEvent $e)
 	if($e.controller().name() == "reset_mutation") { mutation.reset(); }
 	if($e.controller().name() == "reset_birth") { birth.reset(); }
 	if($e.controller().name() == "reset_rebirth") { rebirth.reset(); }
-	//rebirth subdivide
-	//if($e.controller().name() == "subdivide") { rebirth.subdivide(rebirth.SUBDIV_RANGE); }
+	//switch shaders
+	if($e.controller().name() == "fly") { sel = 0; }
+	if($e.controller().name() == "tunnel") { sel = 1; }
+	if($e.controller().name() == "relief_tunnel") { sel = 2; }
 }
 
 //splitscreen
