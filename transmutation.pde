@@ -490,6 +490,11 @@ void spring2_sensitivity(float $value)
 	birth.setSpring2Sensitivity($value);
 }
 
+void birth_burst_sensitivity(float $value)
+{
+	birth.setBurstSensitivity($value);
+}
+
 //rebirth
 void distort_sensitivity_range(float $value)
 {
@@ -543,4 +548,9 @@ void subdiv_sensitivity_range(float $value)
 {
 	float[] values = rebirthGui.subdiv_sensitivity_range_slider.arrayValue();
 	rebirth.setSubdivSensitivity(values[0], values[1]);
+}
+
+void rebirth_burst_sensitivity(float $value)
+{
+	rebirth.setBurstSensitivity($value);
 }

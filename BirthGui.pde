@@ -8,6 +8,7 @@ class BirthGui
 	Slider mover_sensitivity_slider;
 	Slider spring1_sensitivity_slider;
 	Slider spring2_sensitivity_slider;
+	Slider burst_sensitivity_slider;
 	
 	BirthGui(ControlP5 $ui, ControlWindow $controlWindow)
 	{
@@ -60,6 +61,14 @@ class BirthGui
 			slider_width, slider_height
 		);
 		spring2_sensitivity_slider.setGroup(scene_birth);
+
+		burst_sensitivity_slider = ui.addSlider(
+			"birth_burst_sensitivity", 
+			0, 100, birth.getBurstSensitivity(),
+			0, play_birth_button.getHeight() + generation_sensitivity_slider.getHeight() + mover_sensitivity_slider.getHeight() + spring1_sensitivity_slider.getHeight() + (padding*6) + spring2_sensitivity_slider.getHeight(),
+			slider_width, slider_height
+		);
+		burst_sensitivity_slider.setGroup(scene_birth);
 
 	}
 	

@@ -30,7 +30,7 @@ class Burst
 	{
 		imageMode(CENTER);
 		image(redOrb, xpos, ypos, radius, radius2);
-		image(blueOrb, xpos, ypos, radius, radius2);
+		image(blueOrb, xpos, ypos, radius/2, radius2/2);
 		//ellipse(xpos, ypos, radius, radius2);
 	}
 	
@@ -42,7 +42,7 @@ class Burst
 		noStroke();
 		imageMode(CENTER);
 		image(redOrb, xpos, ypos, radius, radius2);
-		image(blueOrb, xpos, ypos, radius, radius2);
+		image(blueOrb, xpos, ypos, radius/2, radius2/2);
 		//ellipse(xpos, ypos, radius, radius2);
 	}
 	

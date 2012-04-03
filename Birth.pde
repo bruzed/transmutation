@@ -11,6 +11,10 @@ class Birth
 	float MOVER_SENSITIVITY = 20;
 	float SPRING1_SENSITIVITY = 20;
 	float SPRING2_SENSITIVITY = 30;
+
+	float BURST_SENSIVITY_DEFAULT = 60;
+	float BURST_SENSIVITY = 60;
+	int NUM_BURSTS = 5;
 	
 	PBox2D box2d;
 	Box box1, box2;
@@ -24,6 +28,8 @@ class Birth
 	float yoff2 = 1280;
 
 	Mover mover;
+
+	ArrayList bursts;
 
 	Birth(FFT $fft, PBox2D $box2d) 
 	{
@@ -46,12 +52,23 @@ class Birth
 
 	  	polygons = new ArrayList<CustomShape>();
 	  	boundaries = new ArrayList<Boundary>();
+
+	  	bursts = new ArrayList();
 	}
 
 	void draw() 
 	{
 		fft.forward(audioInput.mix);
 		int w = int(width/fft.avgSize());
+
+		for( int i = 0; i < bursts.size(); i++ ) {
+			Burst burst = (Burst) bursts.get(i);
+			if(burst.radius > width + 200) {
+				bursts.remove(i);
+			} else {
+				burst.update();
+			}
+		}
 
 	  	box2d.step();
 		box1.body.setAngularVelocity(0);
@@ -104,6 +121,15 @@ class Birth
 				box2.w = box2.h = fft.getAvg(i) * 2;
 			}
 
+			//bursts
+			if( fft.getAvg(i) > BURST_SENSIVITY ) {
+				if( bursts.size() < NUM_BURSTS ) {
+					Burst burst = new Burst(width/2, height/2);
+					bursts.add(burst);
+					burst.draw();
+				}
+			}
+
 		}
 
 		mover.display();
@@ -134,6 +160,11 @@ class Birth
 	{
 		return SPRING2_SENSITIVITY;
 	}
+
+	float getBurstSensitivity()
+	{
+		return BURST_SENSIVITY;
+	}
 	
 	void setGenerationSensitivity(float $value)
 	{
@@ -154,6 +185,11 @@ class Birth
 	{
 		SPRING2_SENSITIVITY = $value;
 	}
+
+	void setBurstSensitivity(float $value)
+	{
+		BURST_SENSIVITY = $value;
+	}
 	
 	void reset()
 	{
@@ -161,6 +197,7 @@ class Birth
 		MOVER_SENSITIVITY = MOVER_SENSITIVITY_DEFAULT;
 		SPRING1_SENSITIVITY = SPRING1_SENSITIVITY_DEFAULT;
 		SPRING2_SENSITIVITY = SPRING2_SENSITIVITY_DEFAULT;
+		BURST_SENSIVITY = BURST_SENSIVITY_DEFAULT;
 	}
 	
 }
