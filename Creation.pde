@@ -80,10 +80,6 @@ class Creation
 				tentacles[i].stop();
 			}
 
-			/*if( fft.getAvg(i) > 50 ) {
-				scale(fft.getAvg(i));
-			}*/
-
 			if( fft.getAvg(i) > TENTACLE_POSITION_SENSITIVITY ) {
 				tentacles[i].changePosition();
 			}

@@ -1,7 +1,7 @@
 /**
  *	<p>Transmutation: Custom audio visualization software created for Speak Onion's <http://www.speakonion.com/> live performances.</p>
  *	
- *	Thanks to Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>
+ *	Some code is inspired by Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>
  *	
  *  Copyright (C) 2012  bruzed
  *
@@ -49,6 +49,7 @@ import toxi.processing.*;
 
 import deadpixel.keystone.*;
 import codeanticode.glgraphics.*;
+import glitchP5.*;
 
 Minim minim;
 AudioInput audioInput;
@@ -130,7 +131,9 @@ int sel = -1;
 
 Button button_fly, button_tunnel, button_rtunnel, button_shaders_off, button_text;
 
-Button keystone_calibrate, keystone_load, keystone_save;
+Button keystone_calibrate, keystone_load, keystone_save, button_glitch;
+
+GlitchP5 glitchP5;
 
 //float t = 1.0;
 
@@ -138,6 +141,9 @@ void setup()
 {
 	//size(screenWidth, screenHeight, OPENGL);
 	size(screenWidth, screenHeight, GLConstants.GLGRAPHICS);
+	
+	glitchP5 = new GlitchP5(this);
+
 	offscreen = new GLGraphicsOffScreen(this, width, height);
 	ks = new Keystone(this);
 	surface = ks.createCornerPinSurface(width, height, 10);
@@ -151,14 +157,14 @@ void setup()
 	
 	//load images
 	//bg = loadImage("mutation.png");
-	blackOrb = loadImage("black_orb.png");
-	whiteOrb = loadImage("white_orb.png");
-	redOrb = loadImage("red_orb.png");
-	greenOrb = loadImage("green_orb.png");
-	blueOrb = loadImage("blue_orb.png");
-	redTriangle = loadImage("red_triangle.png");
-	greenTriangle = loadImage("green_triangle.png");
-	whiteTriangle = loadImage("white_triangle.png");
+	//blackOrb = loadImage("black_orb.png");
+	whiteOrb = loadImage("_v2/white_orb.png");
+	redOrb = loadImage("_v2/red_orb.png");
+	greenOrb = loadImage("_v2/green_orb.png");
+	blueOrb = loadImage("_v2/blue_orb.png");
+	redTriangle = loadImage("_v2/red_triangle.png");
+	greenTriangle = loadImage("_v2/green_triangle.png");
+	whiteTriangle = loadImage("_v2/white_triangle.png");
 	
 	//setup minim
 	minim = new Minim(this);
@@ -202,7 +208,8 @@ void setup()
 	GLTextureParameters params = new GLTextureParameters();
 	params.wrappingU = REPEAT;
 	params.wrappingV = REPEAT;
-	mutation_texture = new GLTexture(this, "mutation.png", params);   
+	//mutation_texture = new GLTexture(this, "mutation.png", params);
+	mutation_texture = new GLTexture(this, "bg3.jpg", params);
 	dest = new GLTexture(this, width, height);
 	  
 	filters = new GLTextureFilter[3];
@@ -268,6 +275,9 @@ void drawGUI()
 
 	button_shaders_off = ui.addButton("shaders_off", 0, 0, button_fly.getHeight() + (padding*2), button_width/2, button_height);
 	button_shaders_off.setGroup(shader_controls);
+
+	button_glitch = ui.addButton("glitch", 0, 800, 400, button_width, button_height);
+	button_glitch.moveTo(controlWindow);
 
 }
 
@@ -339,7 +349,10 @@ void draw()
 				break;
 		}
 
-		//text(filters[sel].getName() + " - fps: " + nfc(frameRate, 2) + " - time: " + nfc(t, 2), 0, 20);
+		stroke(255);
+		// text(filters[sel].getName() + " - fps: " + nfc(frameRate, 2) + " - time: " + nfc(t, 2), 0, 20);
+		//text("fps: " + nfc(frameRate, 2), 0, 40);
+		glitchP5.run();
 
 	offscreen.endDraw();
 
@@ -363,12 +376,10 @@ void keyPressed()
 	    	// & moved
 	    	ks.toggleCalibration();
 	    	break;
-
 	  	case 'l':
 	    	// loads the saved layout
 	    	ks.load();
 	    	break;
-
 	  	case 's':
 	    	// saves the layout
 	    	ks.save();
@@ -400,12 +411,12 @@ void controlEvent(ControlEvent $e)
 	//println($e.controller().name());
 	//current_scene = $e.controller().id();
 	//play
-	if($e.controller().name() == "play_creation") { current_scene = $e.controller().id(); }
-	if($e.controller().name() == "play_mutation") { current_scene = $e.controller().id(); }
-	if($e.controller().name() == "play_birth") { current_scene = $e.controller().id(); }
-	if($e.controller().name() == "play_rebirth") { current_scene = $e.controller().id(); }
-	if($e.controller().name() == "play_lights") { current_scene = $e.controller().id(); }
-	if($e.controller().name() == "speak_onion") { current_scene = $e.controller().id(); }
+	if($e.controller().name() == "play_creation") { current_scene = $e.controller().id(); glitch(); }
+	if($e.controller().name() == "play_mutation") { current_scene = $e.controller().id(); glitch(); }
+	if($e.controller().name() == "play_birth") { current_scene = $e.controller().id(); glitch(); }
+	if($e.controller().name() == "play_rebirth") { current_scene = $e.controller().id(); glitch(); }
+	if($e.controller().name() == "play_lights") { current_scene = $e.controller().id(); glitch(); }
+	if($e.controller().name() == "speak_onion") { current_scene = $e.controller().id(); glitch(); }
 	//reset
 	if($e.controller().name() == "reset_creation") { creation.reset(); }
 	if($e.controller().name() == "reset_mutation") { mutation.reset(); }
@@ -413,14 +424,16 @@ void controlEvent(ControlEvent $e)
 	if($e.controller().name() == "reset_rebirth") { rebirth.reset(); }
 	if($e.controller().name() == "reset_lights") { lights.reset(); }
 	//switch shaders
-	if($e.controller().name() == "fly") { sel = 0; }
-	if($e.controller().name() == "tunnel") { sel = 1; }
-	if($e.controller().name() == "relief_tunnel") { sel = 2; }
-	if($e.controller().name() == "shaders_off") { sel = -1; }
+	if($e.controller().name() == "fly") { sel = 0; glitch(); }
+	if($e.controller().name() == "tunnel") { sel = 1; glitch(); }
+	if($e.controller().name() == "relief_tunnel") { sel = 2; glitch(); }
+	if($e.controller().name() == "shaders_off") { sel = -1; glitch(); }
 	//keystone controls
 	if($e.controller().name() == "calibrate") { ks.toggleCalibration(); }
 	if($e.controller().name() == "save") { ks.save(); }
 	if($e.controller().name() == "load") { ks.load(); }
+	// glitch
+	if($e.controller().name() == "glitch") { glitch(); }
 }
 
 //splitscreen
@@ -430,6 +443,41 @@ void splitscreen(boolean theFlag) {
   	} else {
     	frame.setLocation( 0, 0);
   	}
+}
+
+void glitch()
+{
+	// posX, posY, posJitterX, posJitterY, sizeX, sizeY, numberOfGlitches, randomness, attack, sustain
+	int posX = screenWidth/2;
+	int posY = screenHeight/2;
+	int posJitterX = int(random(200, screenWidth));
+	int posJitterY = int(random(200, screenHeight));
+	int sizeX = screenWidth;
+	int sizeY = screenHeight;
+	// int numGlitches = int(random(1,5));
+	int numGlitches = 3;
+	//int randomness = int(random(1, 10));
+	int randomness = 1;
+	int attack = 1;
+	int sustain = 10;
+
+	// println(
+	// 	"posX: " + posX 
+	// 	+ ", posY: " + posY
+	// 	+ ", posJitterX: " + posJitterX
+	// 	+ ", posJitterY: " + posJitterY
+	// 	+ ", sizeX: " + sizeX
+	// 	+ ", sizeY: " + sizeY
+	// 	+ ", numGlitches: " + numGlitches
+	// 	+ ", randomness: " + randomness
+	// 	+ ", attack: " + attack
+	// 	+ ", sustain: " + sustain
+	// );
+	
+	glitchP5.glitch( 
+		posX, posY, posJitterX, posJitterY, 
+		sizeX, sizeY, numGlitches, randomness, attack, sustain
+	);
 }
 
 //creation
