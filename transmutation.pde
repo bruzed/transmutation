@@ -150,7 +150,7 @@ void setup()
 
 	hint(DISABLE_OPENGL_2X_SMOOTH);
 	smooth();
-	frameRate(30);
+	//frameRate(30);
 
 	//PFont font = loadFont("Tahoma-18.vlw");
   	//textFont(font, 18);
