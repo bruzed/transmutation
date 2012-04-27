@@ -57,6 +57,9 @@ class Creation
 		fft.forward(audioInput.mix);
 		int w = int(width/fft.avgSize());
 		
+		pushMatrix();
+		translate(width, height);
+		rotate( radians(180) );
 		for( int i = 0; i < bursts.size(); i++ ) {
 			Burst burst = (Burst) bursts.get(i);
 			if(burst.radius > width + 200) {
@@ -77,10 +80,6 @@ class Creation
 				tentacles[i].stop();
 			}
 
-			/*if( fft.getAvg(i) > 50 ) {
-				scale(fft.getAvg(i));
-			}*/
-
 			if( fft.getAvg(i) > TENTACLE_POSITION_SENSITIVITY ) {
 				tentacles[i].changePosition();
 			}
@@ -97,6 +96,7 @@ class Creation
 				}
 			}
 		}
+		popMatrix();
 	}
 	
 	//getters/setters

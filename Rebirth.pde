@@ -39,6 +39,10 @@ class Rebirth
 	float ROTATEX_FAST_SENSITIVITY_MAX = 46;
 	float SUBDIV_SENSITIVITY_MIN = 40;
 	float SUBDIV_SENSITIVITY_MAX = 41;
+
+	float BURST_SENSIVITY_DEFAULT = 60;
+	float BURST_SENSIVITY = 60;
+	int NUM_BURSTS = 5;
 	
 	ToxiclibsSupport gfx;
 	WETriangleMesh mesh;
@@ -62,9 +66,12 @@ class Rebirth
 	
 	String[] subdivisionTypes = { "MidpointSubdivision", "MidpointDisplacementSubdivision", "DualSubdivision", "TriSubdivision", "NormalDisplacementSubdivision" };
 
+	ArrayList bursts;
+
 	Rebirth(FFT $fft, ToxiclibsSupport $gfx) 
 	{
 	  	fft = $fft;
+	  	bursts = new ArrayList();
 		//gfx = new ToxiclibsSupport(this);
 		gfx = $gfx;
 	  	initMesh();
@@ -74,7 +81,7 @@ class Rebirth
 	{
 	  mesh = new WETriangleMesh();
 	  //mesh.addMesh(new Plane(new Vec3D(), new Vec3D(0, 1, 0)).toMesh(400));
-	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 50).toMesh());
+	  mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 40).toMesh());
 	  backupMesh();
 	}
 
@@ -92,6 +99,16 @@ class Rebirth
 		//fill(255, 150);
 		//text("subdivision: " + subdivisionTypes[randomSubdiv], 10, 40);
 		//text("subdivision: " + subdivisionTypes[randomSubdiv-1] + " " + vectorCoords, 140, 700, 300, 100);
+
+		for( int i = 0; i < bursts.size(); i++ ) {
+			Burst burst = (Burst) bursts.get(i);
+			if(burst.radius > width + 200) {
+				bursts.remove(i);
+			} else {
+				burst.update();
+			}
+		}
+
 		fill(c1, 50);
 		//noFill();
 		stroke(c1, 50);
@@ -160,11 +177,21 @@ class Rebirth
 			}
 
 			if( fft.getAvg(i) > SUBDIV_SENSITIVITY_MIN && fft.getAvg(i) < SUBDIV_SENSITIVITY_MAX ) {
-				subdivide( SUBDIV_RANGE );
+				//subdivide( SUBDIV_RANGE );
+				change_color();
 			}
 
 			if( fft.getAvg(i) > ROTATEX_FAST_SENSITIVITY_MIN && fft.getAvg(i) < ROTATEX_FAST_SENSITIVITY_MAX ) {
 				rotateXValue += 0.5f;
+			}
+
+			//bursts
+			if( fft.getAvg(i) > BURST_SENSIVITY ) {
+				if( bursts.size() < NUM_BURSTS ) {
+					Burst burst = new Burst(width/2, height/2);
+					bursts.add(burst);
+					burst.draw();
+				}
 			}
 		}
 		popMatrix();
@@ -190,11 +217,11 @@ class Rebirth
 	    // subdivide all mesh edges if their length > 10
 		randomSubdiv = round( random( 1, 5 ) );
 		//fill( 255, 0, 0, 100);
-		c1 = color( random(0, 255), random(0, 255), random(0, 255) );
+		//c1 = color( random(0, 255), random(0, 255), random(0, 255) );
 		//fill( random(0, 255), random(0, 255), random(0, 255), 100);
-		fill(c1, 150);
+		//fill(c1, 150);
 		//stroke(c1, 50);
-		noStroke();
+		//noStroke();
 
 		switch( randomSubdiv ) {
 	      case '1':
@@ -231,6 +258,13 @@ class Rebirth
 		  }
 		  mesh.rebuildIndex();
 		  backupMesh();
+	}
+
+	void change_color()
+	{
+		c1 = color( random(0, 255), random(0, 255), random(0, 255) );
+		fill(c1, 150);
+		noStroke();
 	}
 	
 	//getters/setters
@@ -306,6 +340,11 @@ class Rebirth
 		values[1] = SUBDIV_SENSITIVITY_MAX;
 		return values;
 	}
+
+	float getBurstSensitivity()
+	{
+		return BURST_SENSIVITY;
+	}
 	
 	void setDistortSensitivity(float $min, float $max)
 	{
@@ -360,6 +399,11 @@ class Rebirth
 		SUBDIV_SENSITIVITY_MIN = $min;
 		SUBDIV_SENSITIVITY_MAX = $max;
 	}
+
+	void setBurstSensitivity(float $value)
+	{
+		BURST_SENSIVITY = $value;
+	}
 	
 	void reset()
 	{
@@ -381,6 +425,7 @@ class Rebirth
 		ROTATEX_FAST_SENSITIVITY_MAX = ROTATEX_FAST_SENSITIVITY_MAX_DEFAULT;
 		SUBDIV_SENSITIVITY_MIN = SUBDIV_SENSITIVITY_MIN_DEFAULT;
 		SUBDIV_SENSITIVITY_MAX = SUBDIV_SENSITIVITY_MAX_DEFAULT;
+		BURST_SENSIVITY = BURST_SENSIVITY_DEFAULT;
 	}
 	
 }

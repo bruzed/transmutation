@@ -13,6 +13,7 @@ class RebirthGui
 	Range rotatez_negative_sensitivity_range_slider;
 	Range rotatex_fast_sensitivity_range_slider;
 	Range subdiv_sensitivity_range_slider;
+	Slider burst_sensitivity_slider;
 	
 	RebirthGui(ControlP5 $ui, ControlWindow $controlWindow)
 	{
@@ -115,6 +116,17 @@ class RebirthGui
 			slider_width, slider_height
 		);
 		subdiv_sensitivity_range_slider.setGroup(scene_rebirth);
+
+		//Button subdivide_rebirth = ui.addButton("subdivide", 0, 0, scene_rebirth.getHeight() + play_rebirth_button.getHeight() + distort_sensitivity_range_slider.getHeight() + rotatex_positive_sensitivity_range_slider.getHeight() + rotatex_negative_sensitivity_range_slider.getHeight() + rotatey_positive_sensitivity_range_slider.getHeight() + rotatey_negative_sensitivity_range_slider.getHeight() + rotatez_positive_sensitivity_range_slider.getHeight() + rotatez_negative_sensitivity_range_slider.getHeight() + rotatex_fast_sensitivity_range_slider.getHeight() + (padding * 10) + 30, reset_button_width, button_height);
+		//subdivide_rebirth.setGroup(scene_rebirth);
+
+		burst_sensitivity_slider = ui.addSlider(
+			"rebirth_burst_sensitivity", 
+			0, 100, rebirth.getBurstSensitivity(),
+			0, scene_rebirth.getHeight() + play_rebirth_button.getHeight() + distort_sensitivity_range_slider.getHeight() + rotatex_positive_sensitivity_range_slider.getHeight() + rotatex_negative_sensitivity_range_slider.getHeight() + rotatey_positive_sensitivity_range_slider.getHeight() + rotatey_negative_sensitivity_range_slider.getHeight() + rotatez_positive_sensitivity_range_slider.getHeight() + rotatez_negative_sensitivity_range_slider.getHeight() + rotatex_fast_sensitivity_range_slider.getHeight() + subdiv_sensitivity_range_slider.getHeight() + (padding * 10), 
+			slider_width, slider_height
+		);
+		burst_sensitivity_slider.setGroup(scene_rebirth);
 
 	}
 	
