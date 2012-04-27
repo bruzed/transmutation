@@ -1,14 +1,14 @@
 #Transmutation
-Custom audio visualization software created for [Speak Onion's](http://www.speakonion.com/) live performance on 01/27/2012 @ The Charleston, NYC.
+Audio visualization software for live performance.
 
-Thanks to [Daniel Shiffman's - The Nature of Code](http://www.shiffman.net/teaching/nature).
+##Key Features
+- 1280 x 800 screen resolution
+- 5 audio-reactive scenes with parameters that can be manipulated in real-time
+- 2 screens: 1 presentation screen and 1 screen with scene controls
+- Glitch effect
+- 3 GLSL effects
+- Keystoning
 
-##Specs
-- Screen resolution: 1280 x 800
-- 4 audio reactive scenes
-	- Creation
-	- Mutation
-	- Birth
-	- Rebirth
-- Splitscreen + GUI controls for each scene
-- Downloadable compiled OSX application
+##Usage
+- Use the controls to manipulate scenes and parameters
+- [Download](https://github.com/bruzed/transmutation/downloads) latest version of compiled OSX application to try it out or download and compile from source
