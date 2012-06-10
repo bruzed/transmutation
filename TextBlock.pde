@@ -17,14 +17,30 @@ class TextBlock
 	float MAX_HEIGHT = 100;
 	
 	int PADDING = 50;
-	
+
 	TextBlock()
 	{
-		
 		target = "Speak Onion ";
 		popmax = 150;
 		mutationRate = 0.01;
 		population = new Population(target, mutationRate, popmax);
+	}
+	
+	TextBlock(String $target, float $xpos, float $ypos)
+	{
+		target = $target;
+		xpos = $xpos;
+		ypos = $ypos;
+		popmax = 150;
+		mutationRate = 0.01;
+		population = new Population(target, mutationRate, popmax);
+	}
+
+	void show()
+	{
+		textAlign(LEFT);
+		fill(255);
+	  	text(target, xpos, ypos);
 	}
 	
 	void draw()

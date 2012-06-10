@@ -118,6 +118,8 @@ PImage whiteOrb, redOrb, greenOrb, blueOrb, blackOrb, redTriangle, greenTriangle
 
 PFont myfont;
 TextBlock textblock;
+TextBlock textblock1, textblock2, textblock3;
+boolean isDrawBlocks = false;
 
 GLGraphicsOffScreen offscreen;
 Keystone ks;
@@ -346,6 +348,25 @@ void draw()
 			default:
 				textblock = new TextBlock();
 				textblock.draw();
+				// if(isDrawBlocks) {
+				// 	textblock1 = new TextBlock("Nonlinear Division", 200, 300);
+				// 	textblock2 = new TextBlock("(nadir version)", 200, 330);
+				// 	textblock3 = new TextBlock("Visuals: bruzed | Music: Speak Onion", 200, 360);
+				// 	textFont(myfont, 24);
+				// 	textblock1.draw();
+				// 	textblock2.draw();
+				// 	textFont(myfont, 16);
+				// 	textblock3.draw();
+				// } else {
+				// 	textblock1 = new TextBlock("Nonlinear Division", 200, 300);
+				// 	textblock2 = new TextBlock("(nadir version)", 200, 330);
+				// 	textblock3 = new TextBlock("Visuals: bruzed | Music: Speak Onion", 200, 360);
+				// 	textFont(myfont, 24);
+				// 	textblock1.show();
+				// 	textblock2.show();
+				// 	textFont(myfont, 16);
+				// 	textblock3.show();
+				// }
 				break;
 		}
 
@@ -383,6 +404,9 @@ void keyPressed()
 	  	case 's':
 	    	// saves the layout
 	    	ks.save();
+	    	break;
+	    case 'd':
+	    	isDrawBlocks = true;
 	    	break;
 	}
 }
