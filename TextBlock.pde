@@ -18,6 +18,8 @@ class TextBlock
 	
 	int PADDING = 50;
 
+	color fillColor = color(255, 255, 255, 100);
+
 	TextBlock()
 	{
 		target = "Speak Onion ";
@@ -39,7 +41,7 @@ class TextBlock
 	void show()
 	{
 		textAlign(LEFT);
-		fill(255);
+		fill(fillColor);
 	  	text(target, xpos, ypos);
 	}
 	
@@ -63,7 +65,7 @@ class TextBlock
 	  // Display current status of populationation
 	  String answer = population.getBest();
 	  textAlign(LEFT);
-	  fill(255);
+	  fill(fillColor);
 	  text(answer, xpos, ypos);
 	}
 	

@@ -69,5 +69,10 @@ class Tentacle
 	{
 		xpos = random(MIN_XPOS, MAX_XPOS);
 	}
+
+	float getAngle()
+	{
+		return angle;
+	}
 	
 }

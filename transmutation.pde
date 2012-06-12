@@ -1,7 +1,7 @@
 /**
  *	<p>Transmutation: Custom audio visualization software created for Speak Onion's <http://www.speakonion.com/> live performances.</p>
  *	
- *	Some code is inspired by Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>
+ *	Some code borrowed from Daniel Shiffman's - The Nature of Code <http://www.shiffman.net/teaching/nature>
  *	
  *  Copyright (C) 2012  bruzed
  *
@@ -121,6 +121,8 @@ TextBlock textblock;
 TextBlock textblock1, textblock2, textblock3;
 boolean isDrawBlocks = false;
 
+PFont debugFont;
+
 GLGraphicsOffScreen offscreen;
 Keystone ks;
 CornerPinSurface surface;
@@ -139,8 +141,22 @@ GlitchP5 glitchP5;
 
 //float t = 1.0;
 
+//text strings
+String[] scrollingText = new String[10];
+
 void setup()
 {
+	scrollingText[0] = "Speak Onion";
+	scrollingText[1] = "I slammed the door in your face If you knock I might open it again I'm not sorry I'm not going to beg forgiveness This time I'll shut you out";
+	scrollingText[2] = "";
+	scrollingText[3] = "You only think you know me I've learned well how to shut Shut you out";
+	scrollingText[4] = "";
+	scrollingText[5] = "You just see a facade The fakeness That is you";
+	scrollingText[6] = "";
+	scrollingText[7] = "This time I'll shut you out";
+	scrollingText[8] = "The hypocrite That is you The false hope That you believe to be true You don't deserve to be in here";
+	scrollingText[9] = "";
+
 	//size(screenWidth, screenHeight, OPENGL);
 	size(screenWidth, screenHeight, GLConstants.GLGRAPHICS);
 	
@@ -191,7 +207,8 @@ void setup()
 	
 	ui = new ControlP5(this);
 	ui.setAutoDraw(false);
-	controlWindow = ui.addControlWindow("controls", 0, 0, 1600, 600);
+	// controlWindow = ui.addControlWindow("controls", 0, 0, 1600, 600);
+	controlWindow = ui.addControlWindow("controls", 1000, 500, 1600, 600);
 	controlWindow.setBackground(color(0));
 	
 	//guis
@@ -202,9 +219,14 @@ void setup()
 	lightsGui = new LightsGui(ui, controlWindow);
 	drawGUI();
 	
-	myfont = loadFont("MechanicalFun-48.vlw");
-	textFont(myfont, 48);
+	// myfont = loadFont("MechanicalFun-48.vlw");
+	// textFont(myfont, 48);
+	myfont = loadFont("wendy-18.vlw");
+	// textFont(myfont, 12);
 	textblock = new TextBlock();
+
+	debugFont = loadFont("Monospaced-18.vlw");
+	textFont(debugFont, 18);
 
 	//shaders
 	GLTextureParameters params = new GLTextureParameters();
@@ -290,6 +312,7 @@ void draw()
 
   	offscreen.beginDraw();
 		
+		textFont(myfont, 48);
 		background(0, 0, 0);
 
 		float t = millis() / 2000.0;
@@ -342,31 +365,24 @@ void draw()
 				lights.draw();
 				break;
 			case 5:
-				textblock = new TextBlock();
-				textblock.draw();
+				// textblock = new TextBlock();
+				// textblock.draw();
+				textFont(myfont, 18);
+				for(int i = 0; i < 45; i++) {
+					String word = scrollingText[ int(random(scrollingText.length)) ];
+					textblock = new TextBlock(word, 10, 18 * i);
+					textblock.draw();
+				}
 				break;
 			default:
-				textblock = new TextBlock();
-				textblock.draw();
-				// if(isDrawBlocks) {
-				// 	textblock1 = new TextBlock("Nonlinear Division", 200, 300);
-				// 	textblock2 = new TextBlock("(nadir version)", 200, 330);
-				// 	textblock3 = new TextBlock("Visuals: bruzed | Music: Speak Onion", 200, 360);
-				// 	textFont(myfont, 24);
-				// 	textblock1.draw();
-				// 	textblock2.draw();
-				// 	textFont(myfont, 16);
-				// 	textblock3.draw();
-				// } else {
-				// 	textblock1 = new TextBlock("Nonlinear Division", 200, 300);
-				// 	textblock2 = new TextBlock("(nadir version)", 200, 330);
-				// 	textblock3 = new TextBlock("Visuals: bruzed | Music: Speak Onion", 200, 360);
-				// 	textFont(myfont, 24);
-				// 	textblock1.show();
-				// 	textblock2.show();
-				// 	textFont(myfont, 16);
-				// 	textblock3.show();
-				// }
+				textFont(myfont, 18);
+				// textblock = new TextBlock();
+				// textblock.draw();
+				for(int i = 0; i < 45; i++) {
+					String word = scrollingText[ int(random(scrollingText.length)) ];
+					textblock = new TextBlock(word, 10, 18 * i);
+					textblock.draw();
+				}
 				break;
 		}
 
@@ -375,9 +391,14 @@ void draw()
 		//text("fps: " + nfc(frameRate, 2), 0, 40);
 		glitchP5.run();
 
+		// fill(255);
+		textFont(myfont, 18);
+		text(frameRate, 20, 20);
+
 	offscreen.endDraw();
 
 	background(0, 0, 0);
+
 	surface.render(offscreen.getTexture());
 	
 }
@@ -388,7 +409,7 @@ void keyPressed()
 	if(key=='1') {
     	frame.setLocation( -1280, 0);
 	} else if(key=='2') {
-    	frame.setLocation(0, 0);
+    	frame.setLocation(5, 25);
   	}
 
   	switch(key) {
