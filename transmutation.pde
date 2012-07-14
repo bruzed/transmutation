@@ -112,8 +112,8 @@ color mutation_green = color(36, 53, 27);
 
 //defaults
 int screenWidth = 1280;
-int screenHeight = 800; //hd
-//int screenHeight = 768;
+//int screenHeight = 800; //hd
+int screenHeight = 768;
 
 PImage bg;
 PImage whiteOrb, redOrb, greenOrb, blueOrb, blackOrb, redTriangle, greenTriangle, whiteTriangle;
@@ -378,12 +378,12 @@ void draw()
 				}
 				break;
 			default:
-				textFont(myfont, 18);
-				for(int i = 0; i < 45; i++) {
-					String word = scrollingText[ int(random(scrollingText.length)) ];
-					textblock = new TextBlock(word, 10, 18 * i);
-					textblock.draw();
-				}
+				// textFont(myfont, 18);
+				// for(int i = 0; i < 45; i++) {
+				// 	String word = scrollingText[ int(random(scrollingText.length)) ];
+				// 	textblock = new TextBlock(word, 10, 18 * i);
+				// 	textblock.draw();
+				// }
 				break;
 		}
 
@@ -392,9 +392,9 @@ void draw()
 		//text("fps: " + nfc(frameRate, 2), 0, 40);
 		// glitchP5.run();
 
-		fill(255);
-		textFont(myfont, 18);
-		text(frameRate, 20, 20);
+		// fill(255);
+		// textFont(myfont, 18);
+		// text(frameRate, 20, 20);
 
 	offscreen.endDraw();
 
