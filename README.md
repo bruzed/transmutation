@@ -1,5 +1,5 @@
 # Transmutation
-Reactive audio visualization tool for VJing/live performance.
+VJing tool for realtime audio reactive visual performance
 
 ## Key Features
 - 1280 x 800 screen resolution
